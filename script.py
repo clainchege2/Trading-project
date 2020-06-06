@@ -92,8 +92,25 @@ def plot_rolling_stats():
         plt.show()
     
     
+def daily_port_returns():
+    alloc= [0.4,0.4,0.1,0.1]
+    start_val = [2000,2000,500,500]
     
-compute_daily_returns() 
+    df_normed = (df.iloc[:] / df.iloc[0])
+    df_alloced = df_normed * alloc
+    df_postval = df_alloced * start_val
+    df_portval = df_postval.sum(axis=1)
+    
+    
+    daily_returns = df_portval.copy()
+    daily_returns.iloc[1:] = (daily_returns.iloc[1:] / daily_returns.shift(1)) -1
+    daily_returns.iloc[0] = 0
+    
+    daily_returns = daily_returns[1:]
+    
+    print(daily_returns.head())
+    
+    return daily_returns
+    
 
-#print(df.head())
-plot_rolling_stats() 
+daily_port_returns()
